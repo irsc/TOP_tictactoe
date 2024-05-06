@@ -9,6 +9,74 @@
 </head>
 <body>
 
+    <header>
+        <h1>Tic tac toe!</h1>
+    </header>
+    <main>
+        <div>
+            <form action="post" class="flex-panel" id="formPlayers">
+                <div>
+                    <label for="playerX">Player X as </label>
+                    <select name="playerX" id="playerX" required>
+                        <option disabled value="">Select an option</option>
+                        <option value="human" selected>Human</option>
+                        <option value="computer">Computer</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="playerO">Player O as </label>
+                    <select name="playerO" id="playerO" required>
+                        <option disabled selected value="">Select an option</option>
+                        <option value="human">Human</option>
+                        <option value="computer">Computer</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="numRounds">Rounds</label>
+                    <input type="number" name="rounds" id="numRounds" value=3>
+                </div>
+                <button type="button" id="startGame" disabled>Start game</button>
+            </form>
+        </div>
+        <div class="flex-panel score disabled" id="panel-score">
+            <div>Player X: <span id="scoreX">-</span></div>
+            <div>Tie: <span id="scoreTie">-</span></div>
+            <div>Player O: <span id="scoreO">-</span></div>
+        </div>
+        <div class="flex-board flex-panel disabled" id="panel-round">
+            <p class="round" id="turn"></p>
+            <div class="board" id="panel-board">
+                <div class="cell" id="1"></div>
+                <div class="cell" id="2"></div>
+                <div class="cell" id="3"></div>
+                <div class="cell" id="4"></div>
+                <div class="cell" id="5"></div>
+                <div class="cell" id="6"></div>
+                <div class="cell" id="7"></div>
+                <div class="cell" id="8"></div>
+                <div class="cell" id="9"></div>
+            </div>
+        </div>
+      <!--   <div class="flex-board" id="panel-board">
+            <div class="board">
+                <div class="cell" id="1"></div>
+                <div class="cell" id="2"></div>
+                <div class="cell" id="3"></div>
+                <div class="cell" id="4"></div>
+                <div class="cell" id="5"></div>
+                <div class="cell" id="6"></div>
+                <div class="cell" id="7"></div>
+                <div class="cell" id="8"></div>
+                <div class="cell" id="9"></div>
+            </div>
+        </div> -->
+        <div class="flex-panel reset disabled" id="panel-reset">
+            <button type="button" id="startNew">Start new game</button>
+            <button type="button" id="reset">Reset match</button>
+        </div>
+        
+    </main>
+
 
     <script src="./game.js"></script>
     

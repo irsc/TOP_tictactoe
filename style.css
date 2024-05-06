@@ -1,0 +1,95 @@
+
+body{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+h1{
+    text-align: center;
+}
+
+main{
+    border-radius: 10px;
+    border: 2px solid grey;
+    max-width: 50%;
+    margin: auto;
+}
+select{
+    max-width: 120px;
+}
+input[type="number"]{
+    max-width: 40px;
+};
+
+.grid-panel{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 2em;
+    background-color: rgba(159, 168, 177, 0.75);
+}
+
+.flex-board{
+    background-color: tomato;
+}
+
+.flex-panel{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 2em;
+    background-color: rgba(159, 168, 177, 0.75);
+}
+
+.score{
+    border-top: lightslategrey solid 1px;
+    background-color: rgba(159, 168, 177, 0.5);
+}
+.disabled{
+    display: none;
+}
+.enabled{
+    visibility: visible;
+}
+.reset{
+    justify-content: space-around;
+    padding: 15px;
+}
+
+#startGame:enabled{
+    background-color: limegreen;
+    color: white;
+    border-radius: 5px;
+}
+#reset{
+    background-color: orange;
+    border-radius: 5px;
+}
+#reset:hover, #startNew:hover, #startGame:hover{
+    background-color: lightgreen
+}
+#startNew{
+    background-color: lightgrey;
+    border-radius: 5px;
+}
+
+.round{
+    text-align: center;
+}
+
+.board{
+    display: grid;
+    max-width: 320px;
+    grid-template-columns: repeat(3,100px);
+    grid-template-rows: repeat(3,minmax(100px, 1fr));
+    background-color:darkgray;
+    gap: 10px;
+}
+
+.cell{
+    background-color: white;
+    height: 200 px;
+}
+
+.cell:hover{
+    background-color: rgba(255, 255, 0, 0.5);
+}
