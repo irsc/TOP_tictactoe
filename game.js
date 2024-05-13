@@ -21,62 +21,67 @@ function createPlayer (name, human) {
     return { getName, getHumanity, getPositions, setPositions, resetPositions, addWin, getWins, resetWins};
   }
 
-function game(gameboard, player1, player2){
+function game(){
     let currentBoard= gameboard.getGameboard();
+    let turnPlayer = 0;
     let ties = 0;
-    const players = [player1, player2];
-    dom.updateScore(player1.getWins(), player2.getWins(), ties);
+    let gameStatus = false;
+    const players = dom.getPlayers();
+    console.log(players);
 
-    function play(rounds=3) {
-        let index = 0;
-        for (let r = 0; r < rounds; r++) {
-            while (currentBoard.length > 0) {
-                let player = players[index];
-                let play;
-                dom.updateTurn(player);
-                if(player.getHumanity()){
-                    play = prompt("Player "+ player.getName() +" position");
-                }else{
-                    play = computerPlay();
-                }
-                
-                if(currentBoard.includes(play)){
-                    player.setPositions(play);
-                    currentBoard = currentBoard.filter(position => position !== play);
-                    if(checkWin(player)){
-                        alert(player.getName() + " wins with "+ player.getPositions());
-                        dom.winnerRound(player);
-                        player.addWin();
-                        break;
-                    }
-                    if(currentBoard.length == 0){
-                        alert("Draw...! no winner this time");
-                        ties++;
-                        break;
-                    }
-                    index==0? index=1 : index=0;
-                    console.log(currentBoard);
-                }else{
-                    alert("invalid position, try again");
-                }
-                
-                
-            };
-            dom.updateScore(player1.getWins(), player2.getWins(), ties);
-            console.log(player1.getWins(), player2.getWins(), ties);
-            player1.resetPositions();
-            player2.resetPositions();
-            currentBoard= gameboard.getGameboard();
-            prompt("Play again");
-            
+    const setTurn = () =>{turnPlayer = getTurn()== 0 ? 1 : 0;};
+    const getTurn = () => turnPlayer;
+    const getGameStatus = () => gameStatus;
+    const setGameStatus = (value) => {gameStatus = value};
+    const setBoard = ()=>{currentBoard= gameboard.getGameboard();};
+    
+
+    
+    function play(tic) {
+        dom.updateScore(players[0].getWins(), players[1].getWins(), ties);
+        let index = getTurn();
+
+        let player = players[index];
+        let move = tic;
+        if(!player.getHumanity()){
+            move = computerPlay();
         }
-        console.log(player1.getName() + " wins: " +  player1.getWins());
+            
+        if(currentBoard.includes(move)){
+            player.setPositions(move);
+            currentBoard = currentBoard.filter(position => position !== move);
+            if(checkWin(player)){
+                dom.winnerRound(player.getName());
+                player.addWin();
+                setGameStatus(true);
+                setBoard();
+            }else if(currentBoard.length == 0){
+                dom.tieRound();
+                ties++;
+                setGameStatus(true);
+                setBoard();
+            }
+
+            console.log(currentBoard);
+        }
+                
+                
+            
+        dom.updateScore(players[0].getWins(), players[1].getWins(), ties);
+ /*        console.log(player1.getWins(), player2.getWins(), ties);
+        player1.resetPositions();
+        player2.resetPositions();
+        currentBoard= gameboard.getGameboard(); */
+        //prompt("Play again");
+      /*      
+        } */
+       /*  console.log(player1.getName() + " wins: " +  player1.getWins());
         console.log(player2.getName() + " wins: " +  player2.getWins());
         console.log("End of the game!");
         player1.resetWins();
         player2.resetWins();
         dom.updateTurn(player1, true);
-        ties = 0;
+        ties = 0;  */
         
     }
     
@@ -108,7 +113,7 @@ function game(gameboard, player1, player2){
         return currentBoard[rndIndex];
     };
 
-    return {play};
+    return {play, getTurn, setTurn, getGameStatus};
     
 }
 
@@ -124,50 +129,120 @@ const dom =(function gameDom() {
     const scoreTie = document.getElementById("scoreTie");
 
     const startNewGameBtn = document.getElementById("startNew");
+    const newRoundBtn = document.getElementById("newRound");
 
     const panelBoard = document.getElementById("panel-board");
     const panelScore = document.getElementById("panel-score");
     const panelRound = document.getElementById("panel-round");
     const panelReset = document.getElementById("panel-reset");
-    
+
+    const boardContainer = document.getElementById("board-container");
+
+    let cells = [];
+    for (let index = 0; index < boardContainer.children.length; index++) {
+        cells[index] = boardContainer.children[index];
+    };
+
     formPlayers.addEventListener("change",()=>{
         if(inputO.checkValidity()  && inputX.checkValidity()){
             startGameBtn.removeAttribute("disabled");
         }
     });
     startGameBtn.addEventListener("click",()=>{
-        panelBoard.classList.remove("disabled");
-        panelScore.classList.remove("disabled");
-        panelRound.classList.remove("disabled");
-        panelReset.classList.remove("disabled");
-        
-        let playerX = createPlayer("Player X", inputX.value == "human");
-        let playerO = createPlayer("Player O", inputO.value == "human");
-        setTimeout(game(gameboard, playerX,playerO).play(numRounds.value), 5000);
-        
+        showBoard();
+        const ticTacToe = game();
+        updateTurn(0);
+        for (let index = 0; index < boardContainer.children.length; index++) {
+            cells[index].addEventListener("click", ()=>{
+                clickCell(cells[index], ticTacToe);
+            });  
+        };
+        startGameBtn.setAttribute("disabled", "");
+
     });
 
     startNewGameBtn.addEventListener("click",()=>{
         window.location.reload();
     });
+
+    newRoundBtn.addEventListener("click",()=>{
+        updateTurn(0);
+
+        for (let index = 0; index < boardContainer.children.length; index++) {
+            cells[index].classList.remove("cross");
+            cells[index].classList.remove("ou");
+        };
+        newRoundBtn.classList.add("disabled");
+
+        boardContainer.removeEventListener("click", function(event) {
+            event.stopImmediatePropagation();
+        });
+    });
+
+   
+
+    function showBoard(){
+        panelBoard.classList.remove("disabled");
+        panelScore.classList.remove("disabled");
+        panelRound.classList.remove("disabled");
+        panelReset.classList.remove("disabled");
+        
+    };
+
+    function getPlayers(){
+        let playerX = createPlayer("Player X", inputX.value == "human");
+        let playerO = createPlayer("Player O", inputO.value == "human");
+        return [playerX, playerO];
+    };
     
-    function updateTurn(player, end = false){
+    function updateTurn(turnPlayer, end = false){
+        const players = getPlayers();
         if(end){
             turn.innerText = "Game completed";
         }else{
-            turn.innerText = "Turn for " + player.getName();
+            turn.innerText = "Turn for " + players[turnPlayer].getName();
             console.log(turn.innerText);
         }
         
     };
-    function winnerRound(player){
-        turn.innerText = player.getName() + " wins this round!";
+    function winnerRound(playerName){
+        turn.innerText = playerName + " wins this round!";
+    };
+    function tieRound(){
+        turn.innerText = "Draw! no winner this round!";
     };
     function updateScore(playX, playO, playTie){
             scoreX.innerText = playX;
             scoreO.innerText = playO;
             scoreTie.innerText = playTie;
     };
-    return {updateTurn, winnerRound, updateScore};
+
+    function clickCell(element, game){
+        if(!element.classList.contains("cross") && !element.classList.contains("ou")){
+            changeCell(element, game.getTurn());
+            game.play(element.id);
+            if(game.getGameStatus()){
+                boardContainer.addEventListener("click", function(event) {
+                    event.stopImmediatePropagation();
+                }, true);
+                newRoundBtn.classList.remove("disabled");
+        
+            }else{
+                game.setTurn();
+                updateTurn(game.getTurn());
+            }
+            
+        }
+    }
+
+    function changeCell(element, turnPlayer){
+        if(turnPlayer == 0){
+            element.classList.add("cross");
+        }else if(turnPlayer == 1){
+            element.classList.add("ou");
+        }
+    }
+
+    return {updateTurn, winnerRound, tieRound, updateScore, getPlayers};
 
 })();

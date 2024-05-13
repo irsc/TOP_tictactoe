@@ -28,7 +28,9 @@ input[type="number"]{
 }
 
 .flex-board{
-    background-color: tomato;
+    display: flex;
+    justify-content: center;
+    padding: 1em;
 }
 
 .flex-panel{
@@ -50,15 +52,15 @@ input[type="number"]{
 .enabled{
     visibility: visible;
 }
-.reset{
-    justify-content: space-around;
-    padding: 15px;
-}
 
 #startGame:enabled{
     background-color: limegreen;
     color: white;
     border-radius: 5px;
+}
+#panel-round{
+    padding: 0.5em;
+    background-color: rgba(206, 222, 227, 0.591);
 }
 #reset{
     background-color: orange;
@@ -87,9 +89,22 @@ input[type="number"]{
 
 .cell{
     background-color: white;
-    height: 200 px;
 }
+
 
 .cell:hover{
     background-color: rgba(255, 255, 0, 0.5);
+}
+
+.cross{
+    background-image: url(./tictactoe_X.svg);
+    background-size: cover;
+    background-color: rgba(237, 233, 219, 0.75);
+    transition: background-image 3s;
+}
+
+.ou{
+    background-image: url(./tictactoe_O.svg);
+    background-size: cover;
+    background-color: rgb(183, 208, 216);
 }

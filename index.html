@@ -43,9 +43,12 @@
             <div>Tie: <span id="scoreTie">-</span></div>
             <div>Player O: <span id="scoreO">-</span></div>
         </div>
-        <div class="flex-board flex-panel disabled" id="panel-round">
+        <div class="flex-panel disabled" id="panel-round">
             <p class="round" id="turn"></p>
-            <div class="board" id="panel-board">
+            <button type="button" id="newRound" class="disabled">New round</button>
+        </div>
+      <div class="flex-board disabled" id="panel-board">
+            <div class="board" id="board-container">
                 <div class="cell" id="1"></div>
                 <div class="cell" id="2"></div>
                 <div class="cell" id="3"></div>
@@ -57,22 +60,8 @@
                 <div class="cell" id="9"></div>
             </div>
         </div>
-      <!--   <div class="flex-board" id="panel-board">
-            <div class="board">
-                <div class="cell" id="1"></div>
-                <div class="cell" id="2"></div>
-                <div class="cell" id="3"></div>
-                <div class="cell" id="4"></div>
-                <div class="cell" id="5"></div>
-                <div class="cell" id="6"></div>
-                <div class="cell" id="7"></div>
-                <div class="cell" id="8"></div>
-                <div class="cell" id="9"></div>
-            </div>
-        </div> -->
-        <div class="flex-panel reset disabled" id="panel-reset">
+        <div class="flex-panel disabled" id="panel-reset">
             <button type="button" id="startNew">Start new game</button>
-            <button type="button" id="reset">Reset match</button>
         </div>
         
     </main>

@@ -1,0 +1,11 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+ <title>ttt_x</title>
+ <g>
+  <title>Layer 1</title>
+  <path fill="#fff" stroke="#000" opacity="NaN" d="m26,36.5" id="svg_3"/>
+  <polyline fill="none" stroke="#000" points="456,52.5 456,52.5 " id="svg_6" stroke-linecap="round"/>
+  <line stroke-width="10" id="svg_2" y2="41.5" x2="166" y1="160.5" x1="26" stroke="#000" fill="none"/>
+  <line stroke-width="15" id="svg_4" y2="176.5" x2="162" y1="36.5" x1="38" stroke="#000" fill="none"/>
+ </g>
+
+</svg>
