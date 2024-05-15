@@ -92,19 +92,24 @@ input[type="number"]{
 }
 
 
-.cell:hover{
+.cellHover:hover{
     background-color: rgba(255, 255, 0, 0.5);
 }
 
 .cross{
     background-image: url(./tictactoe_X.svg);
     background-size: cover;
-    background-color: rgba(237, 233, 219, 0.75);
+    background-color: rgba(238, 236, 229, 0.95);
     transition: background-image 3s;
 }
 
 .ou{
     background-image: url(./tictactoe_O.svg);
     background-size: cover;
-    background-color: rgb(183, 208, 216);
+    background-color: rgba(206, 216, 220, 0.95);
+}
+
+.winHighlight{
+    background-color: goldenrod;
+    border: solid red 1px;
 }
