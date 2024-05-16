@@ -100,7 +100,6 @@ input[type="number"]{
     background-image: url(./tictactoe_X.svg);
     background-size: cover;
     background-color: rgba(238, 236, 229, 0.95);
-    transition: background-image 3s;
 }
 
 .ou{

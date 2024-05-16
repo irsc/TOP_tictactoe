@@ -35,19 +35,21 @@ function game(){
     const setGameStatus = (value) => {gameStatus = value};
     const setBoard = ()=>{currentBoard= gameboard.getGameboard();};
     
-    function play(move) {
+    function play(varPlay) {
+        let move = varPlay;
         dom.updateScore(players[0].getWins(), players[1].getWins(), ties);
         let index = getTurn();
 
         let player = players[index];
         if(!player.getHumanity()){
             move = computerPlay();
+            dom.changeCell(dom.getElementBoard(move-1), turnPlayer);
         }
             
         if(currentBoard.includes(move)){
             player.setPositions(move);
             currentBoard = currentBoard.filter(position => position !== move);
-            
+            console.log(currentBoard);
             if(Array.isArray(checkWin(player))){
                 dom.winnerRound(player.getName());
                 dom.highlightCell(checkWin(player));
@@ -93,6 +95,7 @@ function game(){
 
     function computerPlay(){
         let rndIndex = Math.floor(Math.random() * currentBoard.length);
+        console.log(currentBoard[rndIndex]);
         return currentBoard[rndIndex];
     };
 
@@ -121,6 +124,10 @@ const dom =(function gameDom() {
 
     const boardContainer = document.getElementById("board-container");
 
+    let ticTacToe;
+    const setGame = () =>ticTacToe =  game();
+    const getGame = () =>ticTacToe;
+
     let rounds = 1;
     let cells = [];
     for (let index = 0; index < boardContainer.children.length; index++) {
@@ -134,14 +141,21 @@ const dom =(function gameDom() {
     });
     startGameBtn.addEventListener("click",()=>{
         showBoard();
-        const ticTacToe = game();
+        setGame();
         updateTurn(0);
         for (let index = 0; index < boardContainer.children.length; index++) {
             cells[index].addEventListener("click", ()=>{
-                clickCell(cells[index], ticTacToe);
+                clickCell(cells[index], getGame());
             });  
         };
         formPlayers.classList.add("disabled");
+
+        const players = getPlayers();
+        if(!players[0].getHumanity()){
+            console.log("turno máquina");
+            getGame().play();
+            gameContinue(getGame());
+        }
 
     });
 
@@ -160,10 +174,21 @@ const dom =(function gameDom() {
         };
         newRoundBtn.classList.add("disabled");
         boardContainer.removeEventListener("click", eventHandler, true);
+
+        const players = getPlayers();
+        if(!players[0].getHumanity()){
+            console.log("turno máquina");
+            getGame().play();
+            gameContinue(getGame());
+        }
     });
 
     function eventHandler(event){
         event.stopImmediatePropagation();
+    }
+
+    function getElementBoard(index){
+        return cells[index];
     }
    
 
@@ -218,20 +243,31 @@ const dom =(function gameDom() {
         if(!element.classList.contains("cross") && !element.classList.contains("ou")){
             changeCell(element, game.getTurn());
             game.play(element.id);
-            if(game.getGameStatus() ){
-                boardContainer.addEventListener("click",eventHandler , true);
+            gameContinue(game);
+        }
+    }
 
-                if(getCurrentRound() == numRounds.value){
-                    updateTurn(game.getTurn(), true);
-                }else{
-                    newRoundBtn.classList.remove("disabled");
-                    game.setGameStatus(false);
-                    game.setTurnValue(0);
-                }
-                
+    function gameContinue(game){
+        if(game.getGameStatus() ){
+            boardContainer.addEventListener("click",eventHandler , true);
+
+            if(getCurrentRound() == numRounds.value){
+                updateTurn(game.getTurn(), true);
             }else{
-                game.setTurn();
-                updateTurn(game.getTurn());
+                newRoundBtn.classList.remove("disabled");
+                game.setGameStatus(false);
+                game.setTurnValue(0);
+            }
+            
+        }else{
+            game.setTurn();
+            updateTurn(game.getTurn());
+            
+            const turnPlayer =  game.getTurn();
+            const players = getPlayers();
+            if(!players[turnPlayer].getHumanity()){
+                game.play();
+                gameContinue(game);
             }
         }
     }
@@ -254,6 +290,6 @@ const dom =(function gameDom() {
         };
     }
 
-    return {updateTurn, winnerRound, tieRound, updateScore, getPlayers, getRounds, highlightCell};
+    return {updateTurn, winnerRound, tieRound, updateScore, changeCell, getElementBoard, getPlayers, getRounds, highlightCell};
 
 })();
